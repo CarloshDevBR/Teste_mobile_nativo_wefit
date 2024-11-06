@@ -9,7 +9,7 @@ import kotlinx.coroutines.Job
 class MoviesRepository : BaseRepository() {
     private val service = RetrofitClient().createService(MoviesService::class.java)
 
-    suspend fun getMovies(listiners: APIListener<MoviesModel>): Job {
+    fun getMovies(listiners: APIListener<MoviesModel>): Job {
         return executeCoroutine(
             call = { service.getMovies() },
             listeners = listiners

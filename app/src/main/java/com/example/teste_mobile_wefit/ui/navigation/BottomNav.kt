@@ -34,19 +34,19 @@ class BottomNav {
             BottomNavigationItemModel(
                 label = "Carrinho",
                 icon = Icons.Outlined.ShoppingCart,
-                route = AppConstants.GRAPH.CART,
+                route = AppConstants.GRAPH.BOTTOM_NAV.CART,
                 disabled = false
             ),
             BottomNavigationItemModel(
                 label = "Home",
                 icon = Icons.Outlined.Home,
-                route = AppConstants.GRAPH.HOME,
+                route = AppConstants.GRAPH.BOTTOM_NAV.HOME,
                 disabled = false
             ),
             BottomNavigationItemModel(
                 label = "Perfil",
                 icon = Icons.Outlined.Person,
-                route = AppConstants.GRAPH.PROFILE,
+                route = AppConstants.GRAPH.BOTTOM_NAV.PROFILE,
                 disabled = true
             )
         )
@@ -68,9 +68,7 @@ class BottomNav {
                     .weight(1F)
                     .then(
                         if (!navigationItem.disabled) {
-                            Modifier.clickable {
-                                onClick(index, navigationItem)
-                            }
+                            Modifier.clickable { onClick(index, navigationItem) }
                         } else {
                             Modifier
                         }

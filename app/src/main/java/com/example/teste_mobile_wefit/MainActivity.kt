@@ -3,8 +3,11 @@ package com.example.teste_mobile_wefit
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.runtime.Composable
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.teste_mobile_wefit.ui.graph.RootGraph
 import com.example.teste_mobile_wefit.ui.theme.AppTheme
+import com.example.teste_mobile_wefit.viewmodel.MainViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -12,8 +15,15 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             AppTheme(dynamicColor = false) {
-                RootGraph()
+                ControllerScreens()
             }
         }
     }
+}
+
+@Composable
+fun ControllerScreens() {
+    val mainViewModel = viewModel(MainViewModel::class.java)
+
+    RootGraph(mainViewModel = mainViewModel)
 }

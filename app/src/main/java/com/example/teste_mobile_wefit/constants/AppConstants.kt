@@ -6,12 +6,20 @@ object AppConstants {
     const val INITIAL_BOTTOM_SCREEN = 1
 
     object GRAPH {
-        const val BOTTOM_NAV = "bottom_nav"
+        object BOTTOM_NAV {
+            const val INDEX = "bottom_nav"
 
-        const val CART = "cart"
+            const val CART = "cart"
 
-        const val HOME = "home"
+            const val HOME = "home"
 
-        const val PROFILE = "profile"
+            const val PROFILE = "profile"
+        }
+    }
+
+    object NATIONALITY {
+        const val COUNTRY = "BR"
+
+        const val LANGAGUE = "pt"
     }
 }
