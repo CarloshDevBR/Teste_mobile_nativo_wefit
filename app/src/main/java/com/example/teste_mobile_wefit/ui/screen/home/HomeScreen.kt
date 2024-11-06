@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.teste_mobile_wefit.ui.composables.CircularLoading
+import com.example.teste_mobile_wefit.ui.composables.GradientCircularLoading
 import com.example.teste_mobile_wefit.viewmodel.HomeViewModel
 
 @Composable
@@ -21,7 +21,7 @@ fun HomeScreen() {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            CircularLoading()
+            GradientCircularLoading()
         }
     }
 }
