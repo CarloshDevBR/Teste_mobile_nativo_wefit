@@ -48,7 +48,7 @@ fun HomeScreen(mainViewModel: MainViewModel) {
                     items(result.data.products.size) { index ->
                         val data = result.data.products[index]
 
-                        CardMovie(data = data)
+                        CardMovie(data = data) { viewModel.addItemCart(it) }
 
                         Spacer(modifier = Modifier.padding(bottom = 24.dp))
                     }

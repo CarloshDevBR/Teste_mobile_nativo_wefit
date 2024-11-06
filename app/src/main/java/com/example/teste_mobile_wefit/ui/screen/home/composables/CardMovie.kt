@@ -27,7 +27,7 @@ import com.example.teste_mobile_wefit.ui.composables.ImageAsync
 import com.example.teste_mobile_wefit.utils.Format
 
 @Composable
-fun CardMovie(data: ProductModel) {
+fun CardMovie(data: ProductModel, onClick: (data: ProductModel) -> Unit) {
     Column(
         modifier = Modifier
             .clip(RoundedCornerShape(4.dp))
@@ -69,7 +69,7 @@ fun CardMovie(data: ProductModel) {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(40.dp),
-            onClick = {},
+            onClick = { onClick(data) },
             colors = ButtonDefaults.buttonColors(
                 containerColor = MaterialTheme.colorScheme.secondary
             ),
