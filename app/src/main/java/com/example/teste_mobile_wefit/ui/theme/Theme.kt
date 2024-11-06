@@ -1,7 +1,6 @@
 package com.example.teste_mobile_wefit.ui.theme
 
 import android.os.Build
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
@@ -21,13 +20,15 @@ private val DarkColorScheme = darkColorScheme(
 
     onPrimary = Black500,
     onSecondary = Gray400,
+
+    onTertiary = White
 )
 
 private val LightColorScheme = lightColorScheme()
 
 @Composable
 fun AppTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
+    darkTheme: Boolean = true,
     // Dynamic color is available on Android 12+
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit

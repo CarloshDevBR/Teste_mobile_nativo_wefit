@@ -4,17 +4,18 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.teste_mobile_wefit.constants.AppConstants
 
 @Composable
 fun RootGraph() {
-    val navController = rememberNavController()
+    val rootNavController = rememberNavController()
 
     NavHost(
-        navController = navController,
-        startDestination = "bottom_nav"
+        navController = rootNavController,
+        startDestination = AppConstants.GRAPH.BOTTOM_NAV
     ) {
-        composable(route = "bottom_nav") {
-            BottomNavGraph(rootNav = navController)
+        composable(route = AppConstants.GRAPH.BOTTOM_NAV) {
+            BottomGraph()
         }
     }
 }
