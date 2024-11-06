@@ -17,6 +17,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.teste_mobile_wefit.constants.AppConstants
 import com.example.teste_mobile_wefit.ui.navigation.BottomNav
+import com.example.teste_mobile_wefit.ui.screen.home.HomeScreen
 
 @Composable
 fun BottomGraph() {
@@ -48,16 +49,14 @@ fun BottomGraph() {
             startDestination = AppConstants.GRAPH.HOME,
             modifier = Modifier.padding(paddingValues = paddingValues),
         ) {
-            composable(route = AppConstants.GRAPH.HOME) {
-                Surface(modifier = Modifier.fillMaxSize()) {
-                    Text(text = "home")
-                }
-            }
-
             composable(route = AppConstants.GRAPH.CART) {
                 Surface(modifier = Modifier.fillMaxSize()) {
                     Text(text = "cart")
                 }
+            }
+
+            composable(route = AppConstants.GRAPH.HOME) {
+                HomeScreen()
             }
 
             composable(route = AppConstants.GRAPH.PROFILE) {
