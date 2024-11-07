@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -43,30 +44,35 @@ fun EmptyScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween
     ) {
-        subtitle?.let {
-            Text(
-                text = it,
-                color = MaterialTheme.colorScheme.onSecondary,
-                fontWeight = MaterialTheme.typography.bodyMedium.fontWeight,
-                fontSize = MaterialTheme.typography.bodySmall.fontSize,
-                fontFamily = MaterialTheme.typography.bodySmall.fontFamily,
-                textAlign = TextAlign.Center
-            )
-        }
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            subtitle?.let {
+                Text(
+                    text = it,
+                    color = MaterialTheme.colorScheme.onSecondary,
+                    fontWeight = MaterialTheme.typography.bodyMedium.fontWeight,
+                    fontSize = MaterialTheme.typography.bodySmall.fontSize,
+                    fontFamily = MaterialTheme.typography.bodySmall.fontFamily,
+                    textAlign = TextAlign.Center
+                )
+            }
 
-        Row(modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 34.dp)
-        ) {
-            Text(
-                text = title,
-                color = MaterialTheme.colorScheme.background,
-                fontWeight = MaterialTheme.typography.bodyLarge.fontWeight,
-                fontSize = MaterialTheme.typography.bodyLarge.fontSize,
-                fontFamily = MaterialTheme.typography.bodyLarge.fontFamily,
-                letterSpacing = MaterialTheme.typography.bodyLarge.letterSpacing,
-                textAlign = TextAlign.Center,
-            )
+            Spacer(modifier = Modifier.padding(2.dp))
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 34.dp)
+            ) {
+                Text(
+                    text = title,
+                    color = MaterialTheme.colorScheme.background,
+                    fontWeight = MaterialTheme.typography.bodyLarge.fontWeight,
+                    fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                    fontFamily = MaterialTheme.typography.bodyLarge.fontFamily,
+                    letterSpacing = MaterialTheme.typography.bodyLarge.letterSpacing,
+                    textAlign = TextAlign.Center
+                )
+            }
         }
 
         Image(
@@ -76,7 +82,9 @@ fun EmptyScreen(
         )
 
         Button(
-            modifier = Modifier.width(174.dp).height(40.dp),
+            modifier = Modifier
+                .width(174.dp)
+                .height(40.dp),
             onClick = { actionButton() },
             colors = ButtonDefaults.buttonColors(
                 containerColor = MaterialTheme.colorScheme.secondary
