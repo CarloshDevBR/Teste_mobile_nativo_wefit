@@ -136,7 +136,6 @@ fun CartSCreen(rootNavController: NavController, mainViewModel: MainViewModel) {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = 24.dp)
-                .padding(bottom = 24.dp)
                 .then(
                     if ((cart == null || cartItems.isNullOrEmpty())) {
                         Modifier
@@ -154,6 +153,7 @@ fun CartSCreen(rootNavController: NavController, mainViewModel: MainViewModel) {
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
+                            .padding(bottom = 24.dp)
                             .clip(RoundedCornerShape(4.dp))
                             .background(MaterialTheme.colorScheme.onTertiary)
                             .padding(16.dp)
@@ -230,8 +230,9 @@ fun CartSCreen(rootNavController: NavController, mainViewModel: MainViewModel) {
                     EmptyScreen(
                         imageModifier = Modifier
                             .width(238.dp)
-                            .height(374.dp),
-                        modifier = Modifier.padding(top = 24.dp),
+                            .height(374.dp)
+                            .padding(bottom = 24.dp),
+                        modifier = Modifier.padding(top = 24.dp).padding(bottom = 24.dp),
                         title = "Compra realizada com sucesso!",
                         subtitle = annotatedString,
                         drawableResId = R.drawable.finalized_cart,
@@ -251,7 +252,9 @@ fun CartSCreen(rootNavController: NavController, mainViewModel: MainViewModel) {
                     EmptyScreen(
                         imageModifier = Modifier
                             .width(178.dp)
-                            .height(344.dp),
+                            .height(344.dp)
+                            .padding(bottom = 24.dp),
+                        modifier = Modifier.padding(bottom = 24.dp),
                         title = "Parece que não há nada por aqui :(",
                         drawableResId = R.drawable.go_home,
                         textButton = "Voltar à Home",
