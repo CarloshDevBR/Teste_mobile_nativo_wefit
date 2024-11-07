@@ -37,6 +37,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.teste_mobile_wefit.entity.CartItemEntity
 import com.example.teste_mobile_wefit.ui.composables.ImageAsync
 import com.example.teste_mobile_wefit.utils.Format
@@ -112,34 +113,38 @@ fun CardItem(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            ImageAsync(
-                url = data.image, modifier = Modifier
-                    .width(56.dp)
-                    .height(72.dp)
-            )
-
-            Column {
-                Text(
-                    text = data.name,
-                    color = MaterialTheme.colorScheme.background,
-                    fontWeight = MaterialTheme.typography.bodyLarge.fontWeight,
-                    fontSize = MaterialTheme.typography.bodyMedium.fontSize,
-                    fontFamily = MaterialTheme.typography.bodyMedium.fontFamily
+            Row(modifier = Modifier.weight(1f), verticalAlignment = Alignment.CenterVertically) {
+                ImageAsync(
+                    url = data.image, modifier = Modifier
+                        .width(56.dp)
+                        .height(72.dp)
                 )
 
-                Text(
-                    text = buildAnnotatedString {
-                        append("Adicionado em ")
+                Spacer(modifier = Modifier.padding(8.dp))
 
-                        withStyle(style = SpanStyle(fontWeight = MaterialTheme.typography.bodySmall.fontWeight)) {
-                            append(data.date)
-                        }
-                    },
-                    color = MaterialTheme.colorScheme.onSecondary,
-                    fontWeight = MaterialTheme.typography.bodyMedium.fontWeight,
-                    fontSize = MaterialTheme.typography.bodySmall.fontSize,
-                    fontFamily = MaterialTheme.typography.bodySmall.fontFamily
-                )
+                Column {
+                    Text(
+                        text = data.name,
+                        color = MaterialTheme.colorScheme.background,
+                        fontWeight = MaterialTheme.typography.bodyLarge.fontWeight,
+                        fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                        fontFamily = MaterialTheme.typography.bodyMedium.fontFamily
+                    )
+
+                    Text(
+                        text = buildAnnotatedString {
+                            append("Adicionado em ")
+
+                            withStyle(style = SpanStyle(fontWeight = MaterialTheme.typography.bodySmall.fontWeight)) {
+                                append(data.date)
+                            }
+                        },
+                        color = MaterialTheme.colorScheme.onSecondary,
+                        fontWeight = MaterialTheme.typography.bodyMedium.fontWeight,
+                        fontSize = MaterialTheme.typography.bodySmall.fontSize,
+                        fontFamily = MaterialTheme.typography.bodySmall.fontFamily
+                    )
+                }
             }
 
             Icon(
@@ -178,9 +183,9 @@ fun CardItem(
 
                 Row(
                     modifier = Modifier
+                        .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(4.dp))
                         .width(60.dp)
-                        .height(26.dp)
-                        .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(4.dp)),
+                        .height(28.dp),
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Text(
@@ -203,14 +208,14 @@ fun CardItem(
                 )
             }
 
-            Column {
+            Column(horizontalAlignment = Alignment.End) {
                 Text(
                     text = "SUBTOTAL",
                     color = MaterialTheme.colorScheme.tertiary,
                     fontWeight = MaterialTheme.typography.bodySmall.fontWeight,
                     fontSize = MaterialTheme.typography.bodySmall.fontSize,
                     fontFamily = MaterialTheme.typography.bodySmall.fontFamily,
-                    textAlign = TextAlign.End
+                    lineHeight = 25.sp
                 )
 
                 Text(
@@ -219,7 +224,7 @@ fun CardItem(
                     fontWeight = MaterialTheme.typography.bodySmall.fontWeight,
                     fontSize = MaterialTheme.typography.bodyMedium.fontSize,
                     fontFamily = MaterialTheme.typography.bodyMedium.fontFamily,
-                    textAlign = TextAlign.End
+                    lineHeight = 15.sp
                 )
             }
         }

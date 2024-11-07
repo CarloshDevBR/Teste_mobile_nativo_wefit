@@ -189,7 +189,7 @@ fun CartSCreen(rootNavController: NavController, mainViewModel: MainViewModel) {
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
                             Text(
-                                text = "Total",
+                                text = "TOTAL",
                                 fontWeight = MaterialTheme.typography.bodySmall.fontWeight,
                                 fontSize = MaterialTheme.typography.bodyMedium.fontSize,
                                 fontFamily = MaterialTheme.typography.bodyMedium.fontFamily,
