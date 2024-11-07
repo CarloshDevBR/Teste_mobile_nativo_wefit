@@ -1,6 +1,5 @@
 package com.example.teste_mobile_wefit.ui.screen.cart.composables
 
-import android.graphics.Paint.Align
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,9 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material.icons.outlined.AddCircleOutline
 import androidx.compose.material.icons.outlined.RemoveCircleOutline
 import androidx.compose.material3.Icon
@@ -35,7 +32,7 @@ import com.example.teste_mobile_wefit.utils.Format
 
 @Composable
 fun CardItem(data: CartItemEntity) {
-    Column(modifier = Modifier.padding(top = 16.dp, bottom = 20.dp)) {
+    Column {
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
@@ -71,18 +68,20 @@ fun CardItem(data: CartItemEntity) {
                 )
             }
 
-            IconButton(onClick = {}) {
-                Icon(
-                    modifier = Modifier.size(28.dp),
-                    imageVector = Icons.Filled.Delete,
-                    contentDescription = "delete item",
-                    tint = MaterialTheme.colorScheme.secondary
-                )
-            }
+
+            Icon(
+                modifier = Modifier.size(28.dp),
+                imageVector = Icons.Filled.Delete,
+                contentDescription = "delete item",
+                tint = MaterialTheme.colorScheme.secondary
+            )
+
         }
 
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 20.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
@@ -90,13 +89,11 @@ fun CardItem(data: CartItemEntity) {
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.End
             ) {
-                IconButton(onClick = {}) {
-                    Icon(
-                        imageVector = Icons.Outlined.RemoveCircleOutline,
-                        contentDescription = "Remover",
-                        tint = MaterialTheme.colorScheme.secondary
-                    )
-                }
+                Icon(
+                    imageVector = Icons.Outlined.RemoveCircleOutline,
+                    contentDescription = "Remover",
+                    tint = MaterialTheme.colorScheme.secondary
+                )
 
                 Spacer(modifier = Modifier.padding(2.dp))
 
@@ -108,13 +105,11 @@ fun CardItem(data: CartItemEntity) {
 
                 Spacer(modifier = Modifier.padding(2.dp))
 
-                IconButton(onClick = { }) {
-                    Icon(
-                        imageVector = Icons.Outlined.AddCircleOutline,
-                        contentDescription = "Adicionar",
-                        tint = MaterialTheme.colorScheme.secondary
-                    )
-                }
+                Icon(
+                    imageVector = Icons.Outlined.AddCircleOutline,
+                    contentDescription = "Adicionar",
+                    tint = MaterialTheme.colorScheme.secondary
+                )
             }
 
             Column(verticalArrangement = Arrangement.Center) {
