@@ -12,4 +12,11 @@ class AppDate {
             Locale(AppConstants.NATIONALITY.LANGAGUE, AppConstants.NATIONALITY.COUNTRY)
         ).format(Date())
     }
+
+    fun getHoursToday(): String {
+        return SimpleDateFormat(
+            "HH:mm",
+            Locale(AppConstants.NATIONALITY.LANGAGUE, AppConstants.NATIONALITY.COUNTRY)
+        ).format(Date())
+    }
 }

@@ -7,7 +7,6 @@ import com.example.teste_mobile_wefit.repository.BaseRepository
 import com.example.teste_mobile_wefit.service.listener.BaseListener
 import com.example.teste_mobile_wefit.service.local.AppDataBase
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.Flow
 
 class CartRepository(context: Context) : BaseRepository() {
     private val database = AppDataBase.getDataBase(context).cartDAO()
@@ -47,6 +46,13 @@ class CartRepository(context: Context) : BaseRepository() {
         )
     }
 
+    fun updateQuantityItem(newQuantity: Int, cartItemId: Int, cartId: Long, listeners: BaseListener<Int>): Job {
+        return executeCoroutineDB(
+            dbCall = { database.updateQuantityItem(newQuantity, cartItemId, cartId) },
+            listeners = listeners
+        )
+    }
+
     fun addItemCart(data: CartItemEntity, listeners: BaseListener<Unit>): Job {
         return executeCoroutineDB(
             dbCall = { database.addItemToCart(data) },
@@ -54,9 +60,9 @@ class CartRepository(context: Context) : BaseRepository() {
         )
     }
 
-    fun removeItem(data: CartItemEntity, listeners: BaseListener<Unit>): Job {
+    fun deleteItem(data: CartItemEntity, listeners: BaseListener<Unit>): Job {
         return executeCoroutineDB(
-            dbCall = { database.removeItem(data) },
+            dbCall = { database.deleteItem(data) },
             listeners = listeners
         )
     }

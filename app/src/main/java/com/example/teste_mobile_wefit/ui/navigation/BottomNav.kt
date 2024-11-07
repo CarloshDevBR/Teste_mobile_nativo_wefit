@@ -54,7 +54,7 @@ class BottomNav {
 
     @Composable
     fun BottomBarItems(
-        quantityCart: Int?,
+        quantityCart: Int,
         navigationSelectedItem: Int,
         onClick: (index: Int, navigationItem: BottomNavigationItemModel) -> Unit
     ) {
@@ -105,7 +105,7 @@ class BottomNav {
                         Spacer(modifier = Modifier.padding(horizontal = 4.dp))
 
                         Text(
-                            text = if (navigationItem.route == AppConstants.GRAPH.BOTTOM_NAV.CART && quantityCart != null) "${navigationItem.label} ${"(${quantityCart})"}" else navigationItem.label,
+                            text = if (navigationItem.route == AppConstants.GRAPH.BOTTOM_NAV.CART && quantityCart != 0) "${navigationItem.label} ${"(${quantityCart})"}" else navigationItem.label,
                             fontWeight = FontWeight.Normal,
                             fontSize = MaterialTheme.typography.bodyMedium.fontSize,
                             color = if (navigationItem.disabled) Color.Gray else MaterialTheme.colorScheme.onTertiary

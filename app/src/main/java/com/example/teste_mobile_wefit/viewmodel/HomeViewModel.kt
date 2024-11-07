@@ -16,6 +16,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -67,6 +68,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                     cartId = cartId,
                     image = data.image,
                     date = dateToday,
+                    subtotal = data.price
                 )
             } else {
                 val createdCartId = createCart()
@@ -80,6 +82,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                         cartId = createdCartId,
                         image = data.image,
                         date = dateToday,
+                        subtotal = data.price
                     )
                 }
             }

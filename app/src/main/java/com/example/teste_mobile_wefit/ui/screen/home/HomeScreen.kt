@@ -3,7 +3,9 @@ package com.example.teste_mobile_wefit.ui.screen.home
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -51,7 +53,7 @@ fun HomeScreen(mainViewModel: MainViewModel) {
                     items(result.data.products.size) { index ->
                         val data = result.data.products[index]
 
-                        val cartItem = cartItems?.find { data.id == it.id }
+                        val cartItem = cartItems?.find { it.id == data.id }
 
                         CardMovie(
                             isAddedCart = cartItem != null,
@@ -84,10 +86,11 @@ fun HomeScreen(mainViewModel: MainViewModel) {
                 }
             }
 
-            else -> {
+            is NetworkResponse.Failure -> {
                 mainViewModel.setIsVisibleBottomBar(false)
 
                 EmptyScreen(
+                    imageModifier = Modifier.width(178.dp).height(394.dp),
                     modifier = Modifier.padding(24.dp),
                     title = "Parece que não há nada por aqui :(",
                     drawableResId = R.drawable.retry,
@@ -95,6 +98,8 @@ fun HomeScreen(mainViewModel: MainViewModel) {
                     actionButton = { viewModel.getMovies() }
                 )
             }
+
+            else -> {}
         }
     }
 }

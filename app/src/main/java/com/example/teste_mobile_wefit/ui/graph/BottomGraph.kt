@@ -34,13 +34,15 @@ fun BottomGraph(mainViewModel: MainViewModel, rootNavController: NavController) 
 
     var navigationSelectedItem by remember { mutableIntStateOf(AppConstants.INITIAL_BOTTOM_SCREEN) }
 
+    val quantityCart = cartItems?.fold(0) { acc, cartItemEntity -> acc + cartItemEntity.quantity } ?: 0
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = { TopBar() },
         bottomBar = {
             if (isVisibleBottomBar) {
                 BottomNav().BottomBarItems(
-                    quantityCart = cartItems?.fold(0) { acc, cartItemEntity -> acc + cartItemEntity.quantity },
+                    quantityCart = quantityCart,
                     navigationSelectedItem = navigationSelectedItem,
                     onClick = { index, navigationItem ->
                         navigationSelectedItem = index

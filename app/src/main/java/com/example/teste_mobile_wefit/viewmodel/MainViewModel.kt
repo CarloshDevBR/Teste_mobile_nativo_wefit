@@ -36,37 +36,45 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             val cartId = getLastOpenCart()
 
-            getCartItems(cartId)
+            _cartItems.update { getCartItems(cartId) }
 
-            getCart()
+            _cart.update { getCart() }
         }
     }
 
-    private fun getCart() {
-        cartRepoDB.getCart(
-            listeners = object : BaseListener<CartEntity?> {
-                override fun onSuccess(response: CartEntity?) {
-                    _cart.update { response }
+    private suspend fun getCart(): CartEntity? { return suspendCancellableCoroutine { continuation ->
+            cartRepoDB.getCart(
+                listeners = object : BaseListener<CartEntity?> {
+                    override fun onSuccess(response: CartEntity?) {
+                        continuation.resume(response) {}
+                    }
+
+                    override fun onError(message: String) {
+                        continuation.resume(null) {}
+                    }
+
+                    override fun onLoading() {}
                 }
-
-                override fun onError(message: String) {}
-
-                override fun onLoading() {}
-            })
+            )
+        }
     }
 
-    private fun getCartItems(cartId: Long) {
-        cartRepoDB.getItemsCartOpen(
-            cartId = cartId,
-            listeners = object : BaseListener<List<CartItemEntity>?> {
-                override fun onSuccess(response: List<CartItemEntity>?) {
-                    _cartItems.update { response }
+    private suspend fun getCartItems(cartId: Long): List<CartItemEntity>? { return suspendCancellableCoroutine { continuation ->
+            cartRepoDB.getItemsCartOpen(
+                cartId = cartId,
+                listeners = object : BaseListener<List<CartItemEntity>?> {
+                    override fun onSuccess(response: List<CartItemEntity>?) {
+                        continuation.resume(response) {}
+                    }
+
+                    override fun onError(message: String) {
+                        continuation.resume(null) {}
+                    }
+
+                    override fun onLoading() {}
                 }
-
-                override fun onError(message: String) {}
-
-                override fun onLoading() {}
-            })
+            )
+        }
     }
 
     private suspend fun getLastOpenCart(): Long = suspendCancellableCoroutine { continuation ->
@@ -74,7 +82,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             listeners = object : BaseListener<Long?> {
                 override fun onSuccess(response: Long?) {
                     val cartId = response ?: 0
-
                     continuation.resume(cartId) {}
                 }
 

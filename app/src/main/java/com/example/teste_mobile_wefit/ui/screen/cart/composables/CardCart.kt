@@ -1,5 +1,7 @@
 package com.example.teste_mobile_wefit.ui.screen.cart.composables
 
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,15 +11,25 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.outlined.AddCircleOutline
 import androidx.compose.material.icons.outlined.RemoveCircleOutline
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.SpanStyle
@@ -25,13 +37,75 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.teste_mobile_wefit.entity.CartItemEntity
 import com.example.teste_mobile_wefit.ui.composables.ImageAsync
 import com.example.teste_mobile_wefit.utils.Format
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
-fun CardItem(data: CartItemEntity) {
+fun CardItem(
+    data: CartItemEntity,
+    onChangeQuantity: (quantity: Int) -> Unit,
+    onDelete: () -> Unit
+) {
+    var quantity by remember { mutableIntStateOf(data.quantity) }
+
+    var showDialog by remember { mutableStateOf(false) }
+
+    var debounceJob by remember { mutableStateOf<Job?>(null) }
+
+    val coroutineScope = rememberCoroutineScope()
+
+    LaunchedEffect(quantity) {
+        debounceJob?.cancel()
+
+        debounceJob = coroutineScope.launch {
+            delay(250L)
+
+            onChangeQuantity(quantity)
+        }
+    }
+
+    if (showDialog) {
+        AlertDialog(
+            shape = RoundedCornerShape(4.dp),
+            onDismissRequest = { showDialog = false },
+            title = {
+                Text(text = "Atenção")
+            },
+            text = {
+                Text(text = "Tem certeza de que deseja remover ${data.name} do carrinho?")
+            },
+            confirmButton = {
+                Button(
+                    shape = RoundedCornerShape(4.dp),
+                    onClick = {
+                        onDelete()
+
+                        showDialog = false
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.secondary
+                    ),
+                ) {
+                    Text(text = "Remover", color = MaterialTheme.colorScheme.onTertiary)
+                }
+            },
+            dismissButton = {
+                Button(
+                    shape = RoundedCornerShape(4.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.secondary
+                    ),
+                    onClick = { showDialog = false }) {
+                    Text(text = "Cancelar", color = MaterialTheme.colorScheme.onTertiary)
+                }
+            }
+        )
+    }
+
     Column {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -68,14 +142,14 @@ fun CardItem(data: CartItemEntity) {
                 )
             }
 
-
             Icon(
-                modifier = Modifier.size(28.dp),
+                modifier = Modifier
+                    .size(28.dp)
+                    .clickable { showDialog = true },
                 imageVector = Icons.Filled.Delete,
                 contentDescription = "delete item",
                 tint = MaterialTheme.colorScheme.secondary
             )
-
         }
 
         Row(
@@ -90,29 +164,46 @@ fun CardItem(data: CartItemEntity) {
                 horizontalArrangement = Arrangement.End
             ) {
                 Icon(
+                    modifier = Modifier.clickable {
+                        if (quantity > 1) {
+                            quantity--
+                        }
+                    },
                     imageVector = Icons.Outlined.RemoveCircleOutline,
-                    contentDescription = "Remover",
+                    contentDescription = "remove",
                     tint = MaterialTheme.colorScheme.secondary
                 )
 
-                Spacer(modifier = Modifier.padding(2.dp))
+                Spacer(modifier = Modifier.padding(4.dp))
 
-                Text(
-                    text = "${data.quantity}",
-                    fontSize = 16.sp,
-                    color = MaterialTheme.colorScheme.onSecondary
-                )
+                Row(
+                    modifier = Modifier
+                        .width(60.dp)
+                        .height(26.dp)
+                        .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(4.dp)),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = quantity.toString(),
+                        color = MaterialTheme.colorScheme.background,
+                        fontWeight = MaterialTheme.typography.bodyMedium.fontWeight,
+                        fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                        fontFamily = MaterialTheme.typography.bodySmall.fontFamily,
+                        textAlign = TextAlign.Center
+                    )
+                }
 
-                Spacer(modifier = Modifier.padding(2.dp))
+                Spacer(modifier = Modifier.padding(4.dp))
 
                 Icon(
+                    modifier = Modifier.clickable { quantity++ },
                     imageVector = Icons.Outlined.AddCircleOutline,
-                    contentDescription = "Adicionar",
+                    contentDescription = "add",
                     tint = MaterialTheme.colorScheme.secondary
                 )
             }
 
-            Column(verticalArrangement = Arrangement.Center) {
+            Column {
                 Text(
                     text = "SUBTOTAL",
                     color = MaterialTheme.colorScheme.tertiary,
@@ -123,7 +214,7 @@ fun CardItem(data: CartItemEntity) {
                 )
 
                 Text(
-                    text = Format().formatCurrencyToBRL(data.quantity * data.price),
+                    text = Format().formatCurrencyToBRL(data.subtotal),
                     color = MaterialTheme.colorScheme.background,
                     fontWeight = MaterialTheme.typography.bodySmall.fontWeight,
                     fontSize = MaterialTheme.typography.bodyMedium.fontSize,

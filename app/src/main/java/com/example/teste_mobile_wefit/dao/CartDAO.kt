@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import com.example.teste_mobile_wefit.entity.CartEntity
 import com.example.teste_mobile_wefit.entity.CartItemEntity
 
@@ -29,7 +30,7 @@ interface CartDAO {
             SET 
                 total = (
                     SELECT 
-                        SUM(quantity * price) 
+                        SUM(subtotal) 
                     FROM 
                         cart_item 
                     WHERE 
@@ -43,8 +44,11 @@ interface CartDAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addItemToCart(data: CartItemEntity): Long
 
+    @Query("UPDATE cart_item SET quantity = :newQuantity, subtotal = :newQuantity * price WHERE id = :cartItemId AND cartId = :cartId")
+    suspend fun updateQuantityItem(newQuantity: Int, cartItemId: Int, cartId: Long): Int
+
     @Delete
-    suspend fun removeItem(data: CartItemEntity)
+    suspend fun deleteItem(data: CartItemEntity)
 
     @Query("UPDATE cart SET finalized = 1, dateFinalized = :dateFinalized WHERE id = :cartId")
     suspend fun finishCart(cartId: Int, dateFinalized: String): Int
