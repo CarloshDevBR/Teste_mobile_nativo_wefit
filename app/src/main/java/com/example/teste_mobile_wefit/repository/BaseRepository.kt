@@ -1,7 +1,6 @@
 package com.example.teste_mobile_wefit.repository
 
-import com.example.teste_mobile_wefit.service.listener.APIListener
-import com.example.teste_mobile_wefit.service.listener.DBListener
+import com.example.teste_mobile_wefit.service.listener.BaseListener
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -13,7 +12,7 @@ open class BaseRepository {
 
     protected fun <T> executeCoroutineHttp(
         call: suspend () -> Response<T>,
-        listeners: APIListener<T>
+        listeners: BaseListener<T>
     ): Job {
         return coroutineScope.launch {
             listeners.onLoading()
@@ -33,8 +32,8 @@ open class BaseRepository {
     }
 
     protected fun <T> executeCoroutineDB(
-        dbCall: suspend () -> T?,
-        listeners: DBListener<T>
+        dbCall: suspend () -> T,
+        listeners: BaseListener<T>
     ): Job {
         return coroutineScope.launch {
             try {

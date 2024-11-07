@@ -9,6 +9,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -26,14 +27,16 @@ import com.example.teste_mobile_wefit.viewmodel.MainViewModel
 fun HomeScreen(mainViewModel: MainViewModel) {
     val viewModel = viewModel(HomeViewModel::class.java)
 
-    val movies = viewModel.movies.collectAsState()
+    val cartItems by mainViewModel.cartItems.collectAsState()
+
+    val movies by viewModel.movies.collectAsState()
 
     LaunchedEffect(Unit) {
         viewModel.getMovies()
     }
 
     Surface(modifier = Modifier.fillMaxSize()) {
-        when (val result = movies.value) {
+        when (val result = movies) {
             is NetworkResponse.Success -> {
                 mainViewModel.setIsVisibleBottomBar(true)
 
@@ -48,7 +51,20 @@ fun HomeScreen(mainViewModel: MainViewModel) {
                     items(result.data.products.size) { index ->
                         val data = result.data.products[index]
 
-                        CardMovie(data = data) { viewModel.addItemCart(it) }
+                        val cartItem = cartItems?.find { data.id == it.id }
+
+                        CardMovie(
+                            isAddedCart = cartItem != null,
+                            quantity = cartItem?.quantity,
+                            data = data
+                        ) {
+                            viewModel.addItemCart(
+                                data = it,
+                                quantity = cartItem?.quantity ?: 0
+                            ) {
+                                mainViewModel.attCartState()
+                            }
+                        }
 
                         Spacer(modifier = Modifier.padding(bottom = 24.dp))
                     }

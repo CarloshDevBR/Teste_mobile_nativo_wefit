@@ -28,6 +28,8 @@ import com.example.teste_mobile_wefit.viewmodel.MainViewModel
 fun BottomGraph(mainViewModel: MainViewModel, rootNavController: NavController) {
     val isVisibleBottomBar by mainViewModel.isVisibleBottomBar.collectAsState()
 
+    val cartItems by mainViewModel.cartItems.collectAsState()
+
     val bottomNavController = rememberNavController()
 
     var navigationSelectedItem by remember { mutableIntStateOf(AppConstants.INITIAL_BOTTOM_SCREEN) }
@@ -38,6 +40,7 @@ fun BottomGraph(mainViewModel: MainViewModel, rootNavController: NavController) 
         bottomBar = {
             if (isVisibleBottomBar) {
                 BottomNav().BottomBarItems(
+                    quantityCart = cartItems?.fold(0) { acc, cartItemEntity -> acc + cartItemEntity.quantity },
                     navigationSelectedItem = navigationSelectedItem,
                     onClick = { index, navigationItem ->
                         navigationSelectedItem = index
@@ -60,7 +63,7 @@ fun BottomGraph(mainViewModel: MainViewModel, rootNavController: NavController) 
             modifier = Modifier.padding(paddingValues = paddingValues),
         ) {
             composable(route = AppConstants.GRAPH.BOTTOM_NAV.CART) {
-                CartSCreen(rootNavController = rootNavController)
+                CartSCreen(rootNavController = rootNavController, mainViewModel = mainViewModel)
             }
 
             composable(route = AppConstants.GRAPH.BOTTOM_NAV.HOME) {

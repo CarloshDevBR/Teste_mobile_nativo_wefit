@@ -1,7 +1,7 @@
 package com.example.teste_mobile_wefit.constants
 
 object AppConstants {
-    const val DATABASE = "wefit"
+    const val DATABASE = "wefit.db"
 
     const val BASE_URL = "https://wefit-movies.vercel.app/api/"
 

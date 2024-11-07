@@ -18,6 +18,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -25,9 +30,20 @@ import androidx.compose.ui.unit.dp
 import com.example.teste_mobile_wefit.model.http.ProductModel
 import com.example.teste_mobile_wefit.ui.composables.ImageAsync
 import com.example.teste_mobile_wefit.utils.Format
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
-fun CardMovie(data: ProductModel, onClick: (data: ProductModel) -> Unit) {
+fun CardMovie(
+    isAddedCart: Boolean,
+    quantity: Int?,
+    data: ProductModel,
+    onClick: (data: ProductModel) -> Unit
+) {
+    var isLoading by remember { mutableStateOf(false) }
+
+    val coroutineScope = rememberCoroutineScope()
+
     Column(
         modifier = Modifier
             .clip(RoundedCornerShape(4.dp))
@@ -69,11 +85,21 @@ fun CardMovie(data: ProductModel, onClick: (data: ProductModel) -> Unit) {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(40.dp),
-            onClick = { onClick(data) },
+            onClick = {
+                coroutineScope.launch {
+                    isLoading = true
+
+                    onClick(data)
+
+                    isLoading = false
+                }
+            },
             colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.secondary
+                containerColor = if (isAddedCart) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary,
+                disabledContainerColor = MaterialTheme.colorScheme.onSecondary
             ),
-            shape = RoundedCornerShape(4.dp)
+            shape = RoundedCornerShape(4.dp),
+            enabled = !isLoading
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
@@ -83,14 +109,16 @@ fun CardMovie(data: ProductModel, onClick: (data: ProductModel) -> Unit) {
                     tint = MaterialTheme.colorScheme.onTertiary
                 )
 
-                Spacer(modifier = Modifier.padding(2.dp))
+                quantity?.let {
+                    Spacer(modifier = Modifier.padding(2.dp))
 
-                Text(
-                    text = "0",
-                    color = MaterialTheme.colorScheme.onTertiary,
-                    fontSize = MaterialTheme.typography.bodySmall.fontSize,
-                    fontFamily = MaterialTheme.typography.bodyMedium.fontFamily
-                )
+                    Text(
+                        text = it.toString(),
+                        color = MaterialTheme.colorScheme.onTertiary,
+                        fontSize = MaterialTheme.typography.bodySmall.fontSize,
+                        fontFamily = MaterialTheme.typography.bodyMedium.fontFamily
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.padding(6.dp))

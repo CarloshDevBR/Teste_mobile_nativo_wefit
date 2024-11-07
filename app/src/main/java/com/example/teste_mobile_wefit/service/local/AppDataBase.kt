@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.example.teste_mobile_wefit.constants.AppConstants
 import com.example.teste_mobile_wefit.dao.CartDAO
 import com.example.teste_mobile_wefit.entity.CartEntity
 import com.example.teste_mobile_wefit.entity.CartItemEntity
@@ -21,7 +22,7 @@ abstract class AppDataBase : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context,
                     AppDataBase::class.java,
-                    "wefit.db"
+                    AppConstants.DATABASE
                 ).build()
 
                 INSTANCE = instance
