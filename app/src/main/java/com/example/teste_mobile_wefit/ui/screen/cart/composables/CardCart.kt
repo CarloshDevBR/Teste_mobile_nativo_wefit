@@ -28,7 +28,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,9 +40,7 @@ import androidx.compose.ui.unit.sp
 import com.example.teste_mobile_wefit.entity.CartItemEntity
 import com.example.teste_mobile_wefit.ui.composables.ImageAsync
 import com.example.teste_mobile_wefit.utils.Format
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 @Composable
 fun CardItem(
@@ -55,18 +52,10 @@ fun CardItem(
 
     var showDialog by remember { mutableStateOf(false) }
 
-    var debounceJob by remember { mutableStateOf<Job?>(null) }
-
-    val coroutineScope = rememberCoroutineScope()
-
     LaunchedEffect(quantity) {
-        debounceJob?.cancel()
+        delay(250L)
 
-        debounceJob = coroutineScope.launch {
-            delay(250L)
-
-            onChangeQuantity(quantity)
-        }
+        onChangeQuantity(quantity)
     }
 
     if (showDialog) {
