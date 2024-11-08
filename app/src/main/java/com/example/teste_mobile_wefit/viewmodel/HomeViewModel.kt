@@ -17,12 +17,13 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 class HomeViewModel(application: Application) : AndroidViewModel(application) {
-    private val moviesRepo = MoviesRepository()
-
     private val cartRepoDB = CartRepository(application.applicationContext)
+
+    private val moviesRepo = MoviesRepository()
 
     private val _movies = MutableStateFlow<NetworkResponse<MoviesModel>>(NetworkResponse.Initial)
     val movies: StateFlow<NetworkResponse<MoviesModel>> get() = _movies
@@ -108,43 +109,43 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    private suspend fun updateTotalCart(cartId: Long): Int? = suspendCancellableCoroutine { continuation ->
-            job = cartRepoDB.updateTotalCart(
-                cartId = cartId,
-                listeners = object : BaseListener<Int> {
-                    override fun onSuccess(response: Int) {
-                        continuation.resume(response) {}
-                    }
-
-                    override fun onError(message: String) {
-                        continuation.resume(null) {}
-                    }
-
-                    override fun onLoading() {}
-                })
-        }
-
-    private suspend fun getLastOpenCart(): Pair<Long, Boolean> = suspendCancellableCoroutine { continuation ->
-            job = cartRepoDB.getLastOpenCart(
-                listeners = object : BaseListener<Long?> {
-                    override fun onSuccess(response: Long?) {
-                        val cartId = response ?: 0
-                        val isOpenCart = cartId > 0
-
-                        continuation.resume(Pair(cartId, isOpenCart)) {}
-                    }
-
-                    override fun onError(message: String) {
-                        continuation.resume(Pair(0, false)) {}
-                    }
-
-                    override fun onLoading() {}
+    private suspend fun updateTotalCart(cartId: Long): Int? = suspendCoroutine { continuation ->
+        job = cartRepoDB.updateTotalCart(
+            cartId = cartId,
+            listeners = object : BaseListener<Int> {
+                override fun onSuccess(response: Int) {
+                    continuation.resume(response)
                 }
-            )
-        }
 
-    private suspend fun createCart(): Long? = suspendCancellableCoroutine { continuation ->
-        job = cartRepoDB.createCart(
+                override fun onError(message: String) {
+                    continuation.resume(null)
+                }
+
+                override fun onLoading() {}
+            })
+    }
+
+    private suspend fun getLastOpenCart(): Pair<Long, Boolean> = suspendCoroutine { continuation ->
+        cartRepoDB.getLastOpenCart(
+            listeners = object : BaseListener<Long?> {
+                override fun onSuccess(response: Long?) {
+                    val cartId = response ?: 0
+                    val isOpenCart = cartId > 0
+
+                    continuation.resume(Pair(cartId, isOpenCart))
+                }
+
+                override fun onError(message: String) {
+                    continuation.resume(Pair(0, false))
+                }
+
+                override fun onLoading() {}
+            }
+        )
+    }
+
+    private suspend fun createCart(): Long? = suspendCoroutine { continuation ->
+        cartRepoDB.createCart(
             data = CartEntity(
                 finalized = false,
                 total = 0.0,
@@ -152,11 +153,11 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
             ),
             listeners = object : BaseListener<Long> {
                 override fun onSuccess(response: Long) {
-                    continuation.resume(response) {}
+                    continuation.resume(response)
                 }
 
                 override fun onError(message: String) {
-                    continuation.resume(null) {}
+                    continuation.resume(null)
                 }
 
                 override fun onLoading() {}

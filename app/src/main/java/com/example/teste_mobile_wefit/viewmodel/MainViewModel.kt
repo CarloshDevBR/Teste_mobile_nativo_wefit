@@ -41,24 +41,24 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    private suspend fun getCart(): CartEntity? { return suspendCoroutine { continuation ->
-            cartRepoDB.getCart(
-                listeners = object : BaseListener<CartEntity?> {
-                    override fun onSuccess(response: CartEntity?) {
-                        continuation.resume(response)
-                    }
-
-                    override fun onError(message: String) {
-                        continuation.resume(null)
-                    }
-
-                    override fun onLoading() {}
+    private suspend fun getCart(): CartEntity? = suspendCoroutine { continuation ->
+        cartRepoDB.getCart(
+            listeners = object : BaseListener<CartEntity?> {
+                override fun onSuccess(response: CartEntity?) {
+                    continuation.resume(response)
                 }
-            )
-        }
+
+                override fun onError(message: String) {
+                    continuation.resume(null)
+                }
+
+                override fun onLoading() {}
+            }
+        )
     }
 
-    private suspend fun getCartItems(cartId: Long): List<CartItemEntity>? { return suspendCoroutine { continuation ->
+    private suspend fun getCartItems(cartId: Long): List<CartItemEntity>? =
+        suspendCoroutine { continuation ->
             cartRepoDB.getItemsCartOpen(
                 cartId = cartId,
                 listeners = object : BaseListener<List<CartItemEntity>?> {
@@ -74,10 +74,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 }
             )
         }
-    }
 
-    private suspend fun getLastOpenCart(): Long = suspendCoroutine { continuation ->
-        cartRepoDB.getLastOpenCart(
+    private suspend fun getLastOpenCart(): Long = suspendCoroutine { continuation -> cartRepoDB.getLastOpenCart(
             listeners = object : BaseListener<Long?> {
                 override fun onSuccess(response: Long?) {
                     val cartId = response ?: 0
