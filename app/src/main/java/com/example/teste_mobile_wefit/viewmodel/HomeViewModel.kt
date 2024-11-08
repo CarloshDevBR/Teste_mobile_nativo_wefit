@@ -12,16 +12,13 @@ import com.example.teste_mobile_wefit.repository.local.CartRepository
 import com.example.teste_mobile_wefit.service.api.NetworkResponse
 import com.example.teste_mobile_wefit.service.listener.BaseListener
 import com.example.teste_mobile_wefit.utils.AppDate
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class HomeViewModel(application: Application) : AndroidViewModel(application) {
     private val moviesRepo = MoviesRepository()
 

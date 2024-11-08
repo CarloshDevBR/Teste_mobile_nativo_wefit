@@ -7,15 +7,14 @@ import com.example.teste_mobile_wefit.entity.CartEntity
 import com.example.teste_mobile_wefit.entity.CartItemEntity
 import com.example.teste_mobile_wefit.repository.local.CartRepository
 import com.example.teste_mobile_wefit.service.listener.BaseListener
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val cartRepoDB = CartRepository(application.applicationContext)
 
@@ -42,15 +41,15 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    private suspend fun getCart(): CartEntity? { return suspendCancellableCoroutine { continuation ->
+    private suspend fun getCart(): CartEntity? { return suspendCoroutine { continuation ->
             cartRepoDB.getCart(
                 listeners = object : BaseListener<CartEntity?> {
                     override fun onSuccess(response: CartEntity?) {
-                        continuation.resume(response) {}
+                        continuation.resume(response)
                     }
 
                     override fun onError(message: String) {
-                        continuation.resume(null) {}
+                        continuation.resume(null)
                     }
 
                     override fun onLoading() {}
@@ -59,16 +58,16 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    private suspend fun getCartItems(cartId: Long): List<CartItemEntity>? { return suspendCancellableCoroutine { continuation ->
+    private suspend fun getCartItems(cartId: Long): List<CartItemEntity>? { return suspendCoroutine { continuation ->
             cartRepoDB.getItemsCartOpen(
                 cartId = cartId,
                 listeners = object : BaseListener<List<CartItemEntity>?> {
                     override fun onSuccess(response: List<CartItemEntity>?) {
-                        continuation.resume(response) {}
+                        continuation.resume(response)
                     }
 
                     override fun onError(message: String) {
-                        continuation.resume(null) {}
+                        continuation.resume(null)
                     }
 
                     override fun onLoading() {}
@@ -77,16 +76,16 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    private suspend fun getLastOpenCart(): Long = suspendCancellableCoroutine { continuation ->
+    private suspend fun getLastOpenCart(): Long = suspendCoroutine { continuation ->
         cartRepoDB.getLastOpenCart(
             listeners = object : BaseListener<Long?> {
                 override fun onSuccess(response: Long?) {
                     val cartId = response ?: 0
-                    continuation.resume(cartId) {}
+                    continuation.resume(cartId)
                 }
 
                 override fun onError(message: String) {
-                    continuation.resume(0) {}
+                    continuation.resume(0)
                 }
 
                 override fun onLoading() {}
